@@ -55,5 +55,8 @@ class StockSerializer(serializers.ModelSerializer):
         # в нашем случае: таблицу StockProduct
         # с помощью списка positions
         for position in positions:
-            StockProduct.objects.filter(stock_id=stock.id, product_id=position['product'].id).update(quantity=position['quantity'], price=position['price'])
+            StockProduct.objects.update_or_create(stock_id=stock.id, product_id=position['product'].id, defaults={'quantity':position['quantity'], 'price':position['price']})
+        # Старый код до правки
+        # for position in positions:
+        #     StockProduct.objects.filter(stock_id=stock.id, product_id=position['product'].id).update(quantity=position['quantity'], price=position['price'])
         return stock
